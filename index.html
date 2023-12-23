@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,700&amp;subset=cyrillic" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&amp;subset=cyrillic" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&amp;subset=cyrillic" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i|Tinos:400,400i&amp;subset=cyrillic"
+		rel="stylesheet">
+	<!-- <script type="text/javascript" src="/shared/3rdparty/jquery/jquery.js" language="javascript1.1"></script> -->
+	<style>
+		* {
+			box-sizing: border-box;
+			margin: 0px;
+		}
+
+		body,
+		html {
+			height: 100%;
+		}
+
+		body {
+			background-color: #000000;
+			color: #ffffff;
+		}
+
+		h1 {
+			font-family: "Playfair Display";
+			font-size: 30px;
+			padding: 10px 0px;
+			margin: 0px;
+		}
+
+		.field-box {
+			border: 2px solid #d0d0d0;
+			float: left;
+		}
+
+		.field {
+			position: relative;
+			width: 1000px;
+			height: 600px;
+
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+
+		.field .tile {
+			width: 25px;
+			height: 25px;
+			background-size: 100%;
+			background-image: url(images/tile-.png);
+			z-index: 5;
+		}
+
+		.field .tileW {
+			background-image: url(images/tile-W.png);
+			width: 25px;
+			height: 25px;
+		}
+
+		.field .tileE {
+			background-image: url(images/tile-E.png);
+			background-size: 100%;
+			z-index: 10;
+			width: 25px;
+			height: 25px;
+			position: relative;
+		}
+
+		.field .tileP {
+			background-image: url(images/tile-P.png);
+			background-size: 100%;
+			z-index: 10;
+			width: 25px;
+			height: 25px;
+			position: relative;
+		}
+
+		.field .rip {
+			background-image: url(images/tile-RIP.png);
+			background-size: 100%;
+			z-index: 10;
+			width: 25px;
+			height: 25px;
+			position: relative;
+		}
+
+		.field .tileHP {
+			background-image: url(images/tile-HP.png);
+			background-size: 100%;
+			z-index: 10;
+			width: 25px;
+			height: 25px;
+			position: relative;
+		}
+
+		.field .tileSW {
+			background-image: url(images/tile-SW.png);
+			background-size: 100%;
+			z-index: 10;
+			width: 25px;
+			height: 25px;
+			position: relative;
+		}
+
+		.field .tileE .health {
+			background-color: #ff0000;
+			z-index: 110;
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 3px;
+			width: 25px;
+		}
+
+		.field .tileP .health {
+			background-color: #00ff00;
+			z-index: 110;
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 3px;
+			width: 25px;
+		}
+
+		.inventory-box {
+			border: 2px solid #d0d0d0;
+			float: left;
+		}
+
+		.inventory {
+			position: relative;
+			width: 800px;
+			height: 32px;
+		}
+
+		.cl {
+			clear: both;
+			display: block;
+		}
+
+
+		.menu {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			position: absolute;
+			width: 100vw;
+			height: 100vh;
+			background-color: rgba(33, 74, 49, 0.737);
+			z-index: 999;
+		}
+
+		.menu .start-inputs {
+			display: flex;
+			flex-direction: row;
+			gap: 20px;
+		}
+
+		.menu .start-inputs input,
+		button {
+			border: 0px solid transparent;
+			height: 40px;
+			border-radius: 12px;
+			padding: 0px 10px;
+		}
+
+		.menu .start-inputs input,
+		button {
+			cursor: pointer;
+		}
+
+		#test-button {
+			position: fixed;
+			right: 10px;
+			top: 10px;
+			z-index: 100500;
+		}
+
+		#you-win {
+			display: none;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			right: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			background-color: rgba(33, 74, 43, 0.737);
+			z-index: 999;
+		}
+	</style>
+</head>
+
+<body>
+	<button id="test-button">test</button>
+	<div class="menu">
+		<h1>Добро пожаловать в 'Рогалик'</h1>
+		<div class="start-inputs">
+			<input id="playerNickname" placeholder="Введите никнейм" type="name" />
+			<button id="start-game">Начать!</button>
+		</div>
+	</div>
+	<h1>Игровое поле <p id="show-player-nickname"></p>
+	</h1>
+	<div class="player-health"></div>
+	<div class="field-box">
+		<div class="field">
+
+		</div>
+	</div>
+	<div class="cl">
+	</div>
+	<div id="game-over">
+		<h1>Game Over!</h1>
+	</div>
+	<div id="you-win">
+		<h1>You Win!</h1>
+	</div>
+	<!--h1>Инвентарь</h1>
+		<div class="inventory-box"><div class="inventory"></div></div-->
+</body>
+<script>
+	function getRandomInt(min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+	function getRandomFromArray(array) {
+		const randomIndex = Math.floor(Math.random() * array.length);
+		const randomValue = array[randomIndex];
+		return randomValue;
+	}
+
+
+
+	class Game {
+
+		constructor() {
+			this.isGameOver = false
+			this.enemies = []
+			this.items = []
+			this.player = null;
+			this.FIELD_WIDTH = 40;
+			this.FIELD_HEIGHT = 24;
+			this.FIELD_CELLS_AMT = this.FIELD_WIDTH * this.FIELD_HEIGHT
+			this.FIELD_RIGHT_BORDER = [40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480, 520, 560, 600, 640, 680, 720, 760, 800, 840, 880, 920, 960]
+			this.FILED_LEFT_BORDER = [1, 41, 81, 121, 161, 201, 241, 281, 321, 361, 401, 441, 481, 521, 561, 601, 641, 681, 721, 761, 801, 841, 881, 921]
+			this.ROOMS_AMT = getRandomInt(5, 10)
+			this.ROADS_AMT = getRandomInt(3, 5)
+		}
+
+
+		start() {
+			this.renderMap();
+			this.createRooms()
+			this.createRoads()
+		}
+
+		moveEnemies() {
+			for (let enemy of this.enemies) {
+				enemy.move()
+			}
+		}
+
+		spawnEnemies() {
+			for (let enemy of this.enemies) {
+				enemy.spawn()
+			}
+		}
+
+
+		renderMap() {
+			const fieldBox = document.querySelector('.field');
+			const startMenu = document.querySelector('.menu');
+			startMenu.remove()
+
+			for (let i = 1; i <= this.FIELD_CELLS_AMT; i++) {
+
+				const cell = document.createElement('div');
+
+
+				cell.classList.add('tileW');
+				cell.id = `cell-${i}`
+
+
+
+				fieldBox.appendChild(cell);
+			}
+
+		}
+
+		createRooms() {
+			for (let i = 0; i < this.ROOMS_AMT; i++) {
+
+				const ROOM_WIDTH = getRandomInt(3, 8)
+
+				let leftCenter = getRandomInt(0, this.FIELD_CELLS_AMT);
+				let rightCenter = leftCenter + ROOM_WIDTH
+
+				let right_upper_corner = rightCenter - this.FIELD_WIDTH
+				// Logic to render rooms without offset
+				// Check start of the room with right border
+				for (let bi = 0; bi < this.FIELD_RIGHT_BORDER.length; bi++) {
+
+					// if start of the room is less than the right border
+					if (right_upper_corner < this.FIELD_RIGHT_BORDER[bi]) {
+
+						// if center of the right border of room is overlapping current row
+						if (right_upper_corner > this.FIELD_RIGHT_BORDER[bi - 1]) {
+
+							// Count offset for a room 
+							const border_offset = right_upper_corner - this.FIELD_RIGHT_BORDER[bi - 1]
+
+							// If offset is real 
+							if (border_offset < ROOM_WIDTH) {
+								// console.log(`Left: ${left_upper_corner}\nRight: ${right_upper_corner}\nBorder: ${this.FIELD_RIGHT_BORDER[bi - 1]}\nOffset: ${border_offset}`)
+
+								// Move room back to it's position
+								leftCenter = leftCenter - border_offset
+								rightCenter = rightCenter - border_offset
+								break
+							}
+						}
+					}
+				}
+
+				// Render rooms
+				for (let j = leftCenter; j < rightCenter; j++) {
+					let up = j - this.FIELD_WIDTH
+					if (up < 0) {
+						up = j
+					}
+
+					let down = j + this.FIELD_WIDTH
+					if (down > this.FIELD_CELLS_AMT) {
+						down = j
+					}
+
+					// If amount is over than field
+					const fallOut = up < 0 || down > 960
+					if (fallOut) {
+						continue
+					}
+
+					// find first col of the room
+					const upperCell = document.getElementById(`cell-${up}`)
+					const middleCell = document.getElementById(`cell-${j}`)
+					const bottomCell = document.getElementById(`cell-${down}`)
+
+					// if already a room or a road
+					const isTile = upperCell.className == 'tile' || middleCell.className == 'tile' || bottomCell.className == 'tile'
+					const noCell = upperCell == null || middleCell == null || bottomCell == null
+					if (isTile || noCell) {
+						continue
+					}
+
+					// Change picture
+					upperCell.className = 'tile'
+					middleCell.className = 'tile'
+					bottomCell.className = 'tile'
+				}
+
+			}
+		}
+
+		createRoads() {
+
+			// for each road
+			for (let i = 0; i <= this.ROADS_AMT; i++) {
+
+				// get random cell from field for road start
+				let roadInitPosition = getRandomInt(0, this.FIELD_HEIGHT * this.FIELD_WIDTH);
+
+				let horizontal_roadStart, horizontal_roadEnd;
+
+
+				// find row that will be a road
+				for (let j = 0; j < this.FIELD_RIGHT_BORDER.length; j++) {
+					if (roadInitPosition < this.FILED_LEFT_BORDER[j]) {
+
+						// console.log(roadInitPosition, this.FILED_LEFT_BORDER[j-1], this.FIELD_RIGHT_BORDER[j-1])
+						horizontal_roadStart = this.FILED_LEFT_BORDER[j - 1]
+						horizontal_roadEnd = this.FIELD_RIGHT_BORDER[j - 1]
+						break
+					}
+				}
+
+				// find first cell for vertical road
+				let vertical_roadStart = roadInitPosition
+				while (vertical_roadStart > this.FIELD_HEIGHT) {
+					vertical_roadStart = vertical_roadStart - this.FIELD_HEIGHT
+				}
+
+				// draw vertical road
+				while (vertical_roadStart < this.FIELD_CELLS_AMT) {
+					let thisCellVert = document.getElementById(`cell-${vertical_roadStart}`)
+					thisCellVert.className = 'tile'
+					vertical_roadStart = vertical_roadStart + this.FIELD_WIDTH
+				}
+
+
+				// draw horizontal road
+				for (let k = horizontal_roadStart; k <= horizontal_roadEnd; k++) {
+					let thisCellHoriz = document.getElementById(`cell-${k}`)
+					thisCellHoriz.className = 'tile'
+				}
+
+			}
+		}
+
+		gameOver() {
+			this.isGameOver = true;
+		}
+	}
+
+	class Entity extends Game {
+		constructor() {
+			super();
+			this.position = null;
+			this.nickname = null;
+			this.id = null;
+			this.prevDirection = null;
+			this.health = 100;
+			this.strength = 10;
+			this.clsname = null
+		}
+
+		cleanCell(cell) {
+			while (cell.firstChild) {
+				cell.removeChild(cell.firstChild);
+			}
+		}
+
+		showHealth(cell) {
+			let healthBar = document.createElement('div')
+			healthBar.className = 'health'
+			healthBar.style.width = (this.health / 4) + 'px';
+			cell.appendChild(healthBar)
+		}
+
+		recalculateHealthBar(cell) {
+			this.cleanCell(cell)
+			this.showHealth(cell)
+		}
+
+		move(nextPosition) {
+			// console.log(this.position, nextPosition)
+
+			// get DOM element of this cell
+			let nextCell = document.getElementById(`cell-${nextPosition}`)
+
+
+			// if it is a wall
+			if (nextCell.className === 'tileW' || nextCell.className === 'tileE' || nextCell === 'tileP') {
+				return
+			}
+
+			if (nextCell.className === 'tileSW') {
+				if (this.clsname === 'tileP') {
+					this.strength += 10
+					updateUserInfo(this.nickname, this.strength,)
+				}
+			}
+
+			if (nextCell.className === 'tileHP') {
+				if (this.clsname === 'tileP') {
+					if (this.health <= 90) {
+						this.health += 10
+					} else {
+						this.health = 100
+					}
+				}
+			}
+
+			// check current cell
+			let currentCell = document.getElementById(`cell-${this.position}`)
+
+			nextCell.className = this.clsname
+			currentCell.className = 'tile'
+			this.cleanCell(currentCell)
+			this.showHealth(nextCell)
+			this.position = nextPosition
+
+
+
+		}
+
+		spawn() {
+			while (true) {
+				let trySpawnPosition = getRandomInt(0, this.FIELD_CELLS_AMT)
+				let thisCell = document.getElementById(`cell-${trySpawnPosition}`)
+				if (thisCell.className === 'tile') {
+					thisCell.className = this.clsname
+					this.position = trySpawnPosition
+					this.prevDirection = trySpawnPosition
+					// console.log(thisCell)
+					break;
+				}
+			}
+		}
+
+		checkSurroundings(directionsArray, target) {
+			let targets = []
+			for (let direction of directionsArray) {
+				if (direction > this.FIELD_CELLS_AMT) {
+					direction = -1 * (this.FIELD_CELLS_AMT - direction)
+				}
+				if (direction < 0) {
+					direction = this.FIELD_CELLS_AMT + direction
+				}
+				if (this.FIELD_RIGHT_BORDER.includes(direction)) {
+					direction = direction - this.FIELD_WIDTH
+				}
+				if (this.FILED_LEFT_BORDER.includes(direction)) {
+					direction = direction + this.FIELD_WIDTH
+				}
+
+				let cell = document.getElementById(`cell-${direction}`)
+				if (cell !== undefined || direction !== null) {
+					if (cell.classList.length > 0) {
+						if (cell.className === target) {
+							targets.push(direction)
+						}
+					}
+				} else {
+					console.log(cell)
+				}
+			}
+			return targets
+		}
+
+		possibleDirections(position) {
+			let possibleMoveArray = [
+				position - this.FIELD_WIDTH, // up
+				position + this.FIELD_WIDTH, // down
+				position + 1, // right
+				position - 1 // left
+			]
+			return possibleMoveArray
+		}
+	}
+
+	class Player extends Entity {
+		constructor(nickname) {
+			super();
+			this.nickname = nickname;
+			this.clsname = 'tileP'
+		}
+
+
+		controls(action) {
+
+			let deadEnemies = 0
+			for (let _enemy in this.enemies) {
+				if (this.enemies[_enemy].health <= 0) {
+					deadEnemies += 1
+				}
+			}
+			// console.log('dead enemies', deadEnemies)
+			if (deadEnemies === 10) {
+				return GameOver('win')
+			}
+
+			this.moveEnemies()
+			let nextPosition;
+
+
+			if (this.health <= 0) {
+				let thisCell = document.getElementById(`cell-${this.position}`)
+				thisCell.className = 'rip'
+
+				return GameOver()
+			}
+
+
+			// console.log(this.prevDirection, this.position) 
+
+			switch (action) {
+				// move up
+				case 'w':
+					// count where does user want to go
+					nextPosition = this.position - this.FIELD_WIDTH
+					this.prevDirection = nextPosition - this.FIELD_WIDTH
+
+					if (nextPosition < 0) {
+						// recalculation due to borders
+						nextPosition = this.FIELD_CELLS_AMT + nextPosition
+						// and cell after
+						this.prevDirection = this.FIELD_CELLS_AMT + nextPosition
+					}
+
+					this.move(nextPosition)
+					break;
+
+				case 's':
+					nextPosition = this.position + this.FIELD_WIDTH
+
+					this.prevDirection = nextPosition + this.FIELD_WIDTH
+
+					if (nextPosition > this.FIELD_CELLS_AMT) {
+						nextPosition = -(this.FIELD_CELLS_AMT - nextPosition)
+						this.prevDirection = -(this.FIELD_CELLS_AMT - nextPosition)
+					}
+
+					this.move(nextPosition)
+					break;
+
+				case 'a':
+					nextPosition = this.position - 1
+
+					this.prevDirection = nextPosition - 1
+
+
+					if (this.FIELD_RIGHT_BORDER.includes(nextPosition)) {
+						nextPosition = this.position + (this.FIELD_WIDTH - 1)
+
+						this.prevDirection = nextPosition + (this.FIELD_WIDTH - 1)
+
+					}
+
+					this.move(nextPosition)
+					break;
+
+				case 'd':
+					nextPosition = this.position + 1
+
+					this.prevDirection = nextPosition + 1
+
+
+					if (this.FILED_LEFT_BORDER.includes(nextPosition)) {
+						nextPosition = this.position - (this.FIELD_WIDTH - 1)
+
+						this.prevDirection = nextPosition - (this.FIELD_WIDTH - 1)
+
+					}
+
+					this.move(nextPosition)
+					break;
+
+				// Hit
+				case ' ':
+					let directions = this.possibleDirections(this.position)
+
+					let enemies = this.checkSurroundings(directions, 'tileE')
+					if (enemies.length > 0) {
+						for (let enemyIndex in enemies) {
+							let enemyCell = enemies[enemyIndex]
+
+							for (let enemyState in this.enemies) {
+								let thisEnemy = this.enemies[enemyState]
+								if (thisEnemy.position === enemyCell) {
+
+									let cellToUpdate = document.getElementById(`cell-${enemyCell}`)
+									thisEnemy.recalculateHealthBar(cellToUpdate)
+
+									thisEnemy.health -= this.strength
+
+								}
+							}
+						}
+					}
+
+					if (this.strength >= 20) {
+						if (this.prevDirection !== null) {
+							// console.log(`prev direction: ${this.prevDirection}`)
+							let wallCell = document.getElementById(`cell-${this.prevDirection}`)
+							if (wallCell !== null || wallCell !== undefined) {
+								if (wallCell.className === 'tileW') {
+									wallCell.className = 'tile'
+								}
+							}
+						}
+					}
+					// if (walls.length > 0) {
+					//     for (let wall in walls) {
+					//         let wallCell = document.getElementById(`cell-${walls[wall]}`)
+					//         wallCell.className = 'tile'
+					//     }
+					// }
+
+					break;
+			}
+
+		}
+
+
+	}
+
+	class Enemy extends Entity {
+		constructor(id) {
+			super();
+			this.id = id;
+			this.clsname = 'tileE'
+		}
+
+
+
+		move() {
+			if (this.player.health <= 0) {
+				return GameOver()
+			}
+
+			if (this.health < 0) {
+				let dead = document.getElementById(`cell-${this.position}`)
+				return dead.className = 'rip'
+			}
+
+			// form an array or possible directions
+			let enemyMoveArray = this.possibleDirections(this.position)
+
+			let possibleDirections = this.checkSurroundings(enemyMoveArray, 'tile');
+			let playerAround = this.checkSurroundings(enemyMoveArray, 'tileP');
+			if (possibleDirections.length === 0 && playerAround.length === 0) {
+				return console.log('stay')
+			}
+
+			if (playerAround.length > 0) {
+				let playerCell = document.getElementById(`cell-${this.player.position}`)
+				this.player.health -= 4
+				this.player.recalculateHealthBar(playerCell)
+				return
+			}
+
+
+			// choose random direction
+			let randomDirection = getRandomInt(0, possibleDirections.length - 1);
+			let randomItem = this.prevDirection !== null ? getRandomFromArray([randomDirection, this.prevDirection]) : randomDirection
+
+			// if random selected prev index and current array has less items -> decrease index
+			while (randomItem > possibleDirections.length) {
+				randomItem--
+				if (randomItem <= possibleDirections.length) {
+					break
+				}
+			}
+
+			let randomCellIndex = possibleDirections[randomItem];
+			if (randomCellIndex === undefined) {
+				randomCellIndex = possibleDirections[randomItem - 1]
+			}
+
+			let thisCell = document.getElementById(`cell-${this.position}`);
+			let randomCell = document.getElementById(`cell-${randomCellIndex}`);
+
+			// console.log(`ID: ${this.id},\nCell Index: ${randomCellIndex}\nArray cell index: ${randomItem}`)
+
+			if (randomCell.className === 'tileW' | randomCell === undefined) {
+				console.log('no way at all');
+				return
+			}
+
+			randomCell.className = 'tileE';
+			thisCell.className = 'tile';
+			this.position = randomCellIndex;
+			this.prevDirection = randomItem
+			this.cleanCell(thisCell)
+			this.showHealth(randomCell)
+
+		}
+
+	}
+
+	class Sword extends Entity {
+		constructor() {
+			super();
+			this.clsname = 'tileSW'
+		}
+	}
+
+	class HealthPotion extends Entity {
+		constructor() {
+			super();
+			this.clsname = 'tileHP'
+		}
+	}
+
+
+	function updateUserInfo(playerName, strength) {
+		const playerInfoElement = document.getElementById('show-player-nickname')
+		while (playerInfoElement.firstChild) {
+			playerInfoElement.removeChild(playerInfoElement.firstChild);
+		}
+		const playerNameInfo = document.createElement('p')
+		const playerStatsInfo = document.createElement('p')
+		playerNameInfo.innerHTML = `Никнейм: ${playerName}`
+		playerStatsInfo.innerHTML = `Сила: ${strength}`
+
+		playerInfoElement.appendChild(playerNameInfo)
+		playerInfoElement.appendChild(playerStatsInfo)
+
+	}
+
+	let game = new Game()
+	let player, enemy, sword, healthpotion;
+
+	// Start game button
+	const myButton = document.getElementById('start-game');
+	myButton.addEventListener('click', () => {
+
+		// User input
+		const playerNameInput = document.getElementById('playerNickname').value.trim()
+
+
+		if (playerNameInput !== '') {
+			game.start();
+			player = new Player(playerNameInput)
+			player.spawn()
+			for (let i = 0; i < 10; i++) {
+				enemy = new Enemy(i)
+				enemy.player = player
+				if (i < 2) {
+					sword = new Sword()
+					sword.spawn()
+				}
+				healthpotion = new HealthPotion()
+				healthpotion.spawn()
+				player.enemies.push(enemy)
+			}
+			player.spawnEnemies()
+			updateUserInfo(playerNameInput, player.strength)
+
+
+			document.addEventListener('keydown', function (event) {
+				player.controls(event.key)
+			});
+
+		} else {
+			alert('Введите имя');
+		}
+	});
+
+
+
+
+	const testButton = document.getElementById('test-button');
+	testButton.addEventListener('click', () => {
+		GameOver()
+	})
+
+	// document.addEventListener('click', function (event) {
+	//     console.log(player)
+	// })
+
+	function GameOver(result) {
+		if (result === 'win') {
+			let gameOver = document.getElementById('you-win')
+			gameOver.style.display = 'flex'
+		} else {
+			let gameOver = document.getElementById('game-over')
+			gameOver.style.display = 'flex'
+		}
+	}
+</script>
+
+</html>
